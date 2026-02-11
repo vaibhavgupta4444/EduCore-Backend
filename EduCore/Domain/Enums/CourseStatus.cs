@@ -2,6 +2,6 @@ namespace EduCore.Domain.Enums;
 
 public enum CourseStatus
 {
-    Draft,
-    Published
+    Draft = 0,
+    Published = 1
 }

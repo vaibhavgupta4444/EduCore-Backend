@@ -2,7 +2,7 @@ namespace EduCore.Domain.Enums;
 
 public enum Difficulty
 {
-    Beginner,
-    Intermediate,
-    Advanced
+    Beginner = 0,
+    Intermediate = 1,
+    Advanced = 2
 }

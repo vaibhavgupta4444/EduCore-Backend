@@ -2,6 +2,6 @@ namespace EduCore.Domain.Enums;
 
 public enum QuestionType
 {
-    SingleChoice,
-    MultipleChoice,
+    SingleChoice = 0,
+    MultipleChoice = 1,
 }

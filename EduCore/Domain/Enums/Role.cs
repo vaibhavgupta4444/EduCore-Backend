@@ -2,6 +2,6 @@ namespace EduCore.Domain.Enums;
 
 public enum Role
 {
-    Instructor,
-    User,
+    Instructor = 1,
+    User = 0,
 }

@@ -9,7 +9,7 @@ using EduCore.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// jwt config
+// JWT CONFIG 
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
@@ -37,7 +37,21 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-// db config
+// CORS CONFIG
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200", "http://localhost:3000", "http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
+
+// DB CONFIG
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -47,16 +61,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         ServerVersion.AutoDetect(connectionString)
     ));
 
+// SERVICES
 
-// register services
 builder.Services.AddScoped<IAuthServices, AuthService>();
 builder.Services.AddScoped<ICourseServices, CourseService>();
 builder.Services.AddScoped<IQuestionServices, QuestionService>();
+builder.Services.AddScoped<IEnrollmentServices, EnrollmentService>();
 
-// added controller + swagger
+// CONTROLLERS + SWAGGER
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
@@ -85,11 +101,9 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
-
 var app = builder.Build();
 
-
+// MIDDLEWARE
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -97,11 +111,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowAngular");
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMiddleware<GlobalExceptionMiddleware>(); // use global error handler
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.MapControllers();
 

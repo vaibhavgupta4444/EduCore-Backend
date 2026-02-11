@@ -24,6 +24,18 @@ public class AppDbContext : DbContext
             .WithMany(u => u.CreatedCourses)
             .HasForeignKey(c => c.InstructorId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Enrollment>()
+            .HasOne(e => e.Student)
+            .WithMany(u => u.Enrollments)
+            .HasForeignKey(e => e.StudentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Enrollment>()
+            .HasOne(e => e.Course)
+            .WithMany(c => c.Enrollments)
+            .HasForeignKey(e => e.CourseId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Enrollment>()
             .HasIndex(e => new { e.StudentId, e.CourseId })

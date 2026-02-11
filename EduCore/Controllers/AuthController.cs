@@ -28,4 +28,15 @@ public class AuthController : ControllerBase
         var token = await _authService.LoginAsync(dto);
         return Ok(new { success = true, token });
     }
+
+    [HttpGet("test")]
+    public IActionResult Test()
+    {
+        return Ok(new { 
+            success = true, 
+            message = "Backend connection successful!", 
+            timestamp = DateTime.Now,
+            server = "EduCore API"
+        });
+    }
 }

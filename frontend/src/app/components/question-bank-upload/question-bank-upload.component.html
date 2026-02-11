@@ -1,0 +1,117 @@
+<div class="question-bank-upload">
+  <div class="upload-instructions">
+    <h4><i class="fas fa-info-circle"></i> Question Bank Upload Guidelines</h4>
+    <div class="instructions-grid">
+      <div class="instruction-item">
+        <i class="fas fa-check-circle"></i>
+        <span>Each question must have at least one correct answer marked</span>
+      </div>
+      <div class="instruction-item">
+        <i class="fas fa-file-excel"></i>
+        <span>Supported formats: .xlsx, .xls (max 10MB)</span>
+      </div>
+      <div class="instruction-item">
+        <i class="fas fa-list"></i>
+        <span>Question types: Multiple Choice, True/False, Short Answer</span>
+      </div>
+      <div class="instruction-item">
+        <i class="fas fa-download"></i>
+        <span>Download our template for the correct format</span>
+      </div>
+    </div>
+    
+    <button class="btn btn-outline template-btn" (click)="downloadTemplate()">
+      <i class="fas fa-download"></i> Download Template
+    </button>
+  </div>
+
+  <div class="upload-area" [class.dragover]="false">
+    <div class="file-input-section">
+      <input
+        type="file"
+        id="questionBankFile"
+        accept=".xlsx,.xls"
+        (change)="onFileSelected($event)"
+        class="file-input">
+      <label for="questionBankFile" class="file-input-label">
+        <i class="fas fa-cloud-upload-alt"></i>
+        <span class="upload-text">Choose Excel File</span>
+        <span class="upload-hint">or drag and drop here</span>
+      </label>
+    </div>
+
+    @if (selectedFile()) {
+      <div class="selected-file">
+        <div class="file-info">
+          <i class="fas fa-file-excel file-icon"></i>
+          <div class="file-details">
+            <span class="file-name">{{ selectedFile()!.name }}</span>
+            <span class="file-size">{{ (selectedFile()!.size / 1024 / 1024).toFixed(2) }} MB</span>
+          </div>
+        </div>
+        <button class="btn btn-ghost clear-btn" (click)="clearFile()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="error-message">
+        <i class="fas fa-exclamation-triangle"></i>
+        {{ error() }}
+      </div>
+    }
+
+    @if (selectedFile()) {
+      <button
+        class="btn btn-primary upload-btn"
+        (click)="onUpload()"
+        [disabled]="isLoading">
+        @if (isLoading) {
+          <i class="fas fa-spinner fa-spin"></i> Uploading...
+        } @else {
+          <i class="fas fa-upload"></i> Upload Questions
+        }
+      </button>
+    }
+  </div>
+
+  <div class="format-example">
+    <h5>Expected Format:</h5>
+    <div class="example-table">
+      <table>
+        <thead>
+          <tr>
+            <th>Question Text</th>
+            <th>Option A</th>
+            <th>Option B</th>
+            <th>Option C</th>
+            <th>Option D</th>
+            <th>Correct Answer</th>
+            <th>Question Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>What is 2+2?</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+            <td>C</td>
+            <td>MultipleChoice</td>
+          </tr>
+          <tr>
+            <td>JavaScript is a programming language</td>
+            <td>True</td>
+            <td>False</td>
+            <td>-</td>
+            <td>-</td>
+            <td>A</td>
+            <td>TrueFalse</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

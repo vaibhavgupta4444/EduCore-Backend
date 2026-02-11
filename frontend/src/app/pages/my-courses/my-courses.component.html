@@ -1,0 +1,332 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Shared Navigation -->
+  <app-shared-navbar></app-shared-navbar>
+
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Loading State -->
+    <div *ngIf="loading()" class="text-center py-12">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+      <p class="mt-4 text-gray-600">Loading your courses...</p>
+    </div>
+
+    <!-- Enrolled Courses -->
+    <div *ngIf="!loading() && enrolledCourses().length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        *ngFor="let course of enrolledCourses()"
+        class="bg-white rounded-lg shadow-sm border hover:shadow-lg transition-shadow duration-200"
+      >
+          <!-- Course Thumbnail -->
+        <div class="h-48 bg-gradient-to-br from-green-400 to-blue-500 rounded-t-lg relative">
+          <img
+            *ngIf="course && course.thumbnail"
+            [src]="course.thumbnail"
+            [alt]="course.title"
+            class="w-full h-full object-cover rounded-t-lg"
+          />
+          <div class="absolute inset-0 bg-black bg-opacity-20 rounded-t-lg flex items-center justify-center">
+            <div *ngIf="!course || !course.thumbnail" class="text-white text-center">
+              <div class="text-4xl mb-2">🎓</div>
+              <p class="text-sm opacity-75">{{ course?.category || 'Course' }}</p>
+            </div>
+          </div>
+          <!-- Enrolled Badge -->
+          <div class="absolute top-4 right-4">
+            <span class="bg-green-600 text-white text-xs font-medium px-2 py-1 rounded-full">
+              Enrolled
+            </span>
+          </div>
+        </div>
+
+        <!-- Course Content -->
+        <div class="p-6">
+          <!-- Category & Difficulty -->
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
+              {{ course?.category }}
+            </span>
+            <span 
+              *ngIf="course?.difficulty !== undefined"
+              class="text-xs font-medium px-2 py-1 rounded-full"
+              [ngClass]="getDifficultyColor(course?.difficulty || 0)"
+            >
+              {{ getDifficultyLabel(course?.difficulty || 0) }}
+            </span>
+          </div>
+
+          <!-- Title -->
+          <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
+            {{ course?.title || 'Untitled Course' }}
+          </h3>
+
+          <!-- Description -->
+          <p class="text-gray-600 text-sm mb-4 line-clamp-3">
+            {{ course?.description || 'No description available.' }}
+          </p>
+
+          <!-- Course Info -->
+          <div class="space-y-2 mb-4">
+            <div *ngIf="course?.estimatedDuration" class="flex items-center text-sm text-gray-500">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              {{ course?.estimatedDuration }} hours
+            </div>
+
+            <div class="flex items-center text-sm text-gray-500">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M8 7V3a1 1 0 011-1h6a1 1 0 011 1v4h3a2 2 0 012 2v1a1 1 0 01-1 1 1 1 0 01-1-1v-1H6v1a1 1 0 01-1 1 1 1 0 01-1-1v-1a2 2 0 012-2h3z"></path>
+              </svg>
+              Enrolled on {{ formatDate(course.createdAt) }}
+            </div>
+
+            <div *ngIf="course?.instructor?.name" class="flex items-center text-sm text-gray-500">
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              {{ course?.instructor?.name }}
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="space-y-2">
+            <!-- Quizzes Section -->
+            @if (isLoadingQuizzes(course.id)) {
+              <div class="text-sm text-gray-500 py-2">
+                <span class="animate-pulse">Loading quizzes...</span>
+              </div>
+            } @else if (getQuizzesForCourse(course.id).length > 0) {
+              <div class="border-t border-gray-200 pt-3 mb-3">
+                <h4 class="text-sm font-semibold text-gray-700 mb-2 flex items-center">
+                  <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+                  </svg>
+                  Available Quizzes
+                </h4>
+                <div class="space-y-2">
+                  @for (quiz of getQuizzesForCourse(course.id); track quiz.id) {
+                    <a [routerLink]="['/quiz', quiz.id]"
+                       class="flex items-center justify-between p-2 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors group">
+                      <div class="flex-1">
+                        <div class="text-sm font-medium text-gray-900 group-hover:text-blue-600">
+                          {{ quiz.title }}
+                        </div>
+                        <div class="text-xs text-gray-500">
+                          {{ quiz.timeLimitMinutes }} minutes
+                        </div>
+                      </div>
+                      <svg class="w-5 h-5 text-gray-400 group-hover:text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                      </svg>
+                    </a>
+                  }
+                </div>
+              </div>
+            }
+            
+            <button 
+              (click)="viewCourseDetails(course)"
+              class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+              Continue Learning
+            </button>
+            <button 
+              (click)="viewCourseDetails(course)"
+              class="w-full border border-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+              View Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading() && enrolledCourses().length === 0" class="text-center py-12">
+      <div class="text-6xl mb-4">🎓</div>
+      <h3 class="text-xl font-medium text-gray-900 mb-2">No enrolled courses yet</h3>
+      <p class="text-gray-600 mb-6">
+        Start your learning journey by enrolling in courses that match your interests.
+      </p>
+      <a
+        routerLink="/courses"
+        class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200"
+      >
+        Browse Courses
+      </a>
+    </div>
+  </div>
+
+  <!-- Course Details Modal -->
+  <div *ngIf="showCourseDetails() && selectedCourse()" 
+       class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+       (click)="closeCourseDetails()">
+    <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+         (click)="$event.stopPropagation()">
+      
+      <!-- Modal Header -->
+      <div class="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+        <h2 class="text-2xl font-bold text-gray-900">Course Details</h2>
+        <button 
+          (click)="closeCourseDetails()"
+          class="text-gray-400 hover:text-gray-600 transition-colors">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="p-6">
+        <!-- Course Image -->
+        <div class="h-64 bg-gradient-to-br from-green-400 to-blue-500 rounded-lg mb-6 relative overflow-hidden">
+          <img
+            *ngIf="selectedCourse()?.thumbnail"
+            [src]="selectedCourse()!.thumbnail"
+            [alt]="selectedCourse()!.title"
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute inset-0 bg-black bg-opacity-20 flex items-center justify-center">
+            <div *ngIf="!selectedCourse()?.thumbnail" class="text-white text-center">
+              <div class="text-6xl mb-2">🎓</div>
+              <p class="text-lg opacity-75">{{ selectedCourse()?.category || 'Course' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Info -->
+        <div class="mb-6">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="text-sm font-medium text-green-600 bg-green-50 px-3 py-1 rounded-full">
+              {{ selectedCourse()?.category }}
+            </span>
+            <span 
+              *ngIf="selectedCourse()?.difficulty !== undefined"
+              class="text-sm font-medium px-3 py-1 rounded-full"
+              [ngClass]="getDifficultyColor(selectedCourse()?.difficulty || 0)">
+              {{ getDifficultyLabel(selectedCourse()?.difficulty || 0) }}
+            </span>
+            <span class="bg-green-600 text-white text-sm font-medium px-3 py-1 rounded-full">
+              Enrolled
+            </span>
+          </div>
+
+          <h3 class="text-3xl font-bold text-gray-900 mb-4">
+            {{ selectedCourse()?.title }}
+          </h3>
+
+          <p class="text-gray-700 text-lg mb-6 leading-relaxed">
+            {{ selectedCourse()?.description }}
+          </p>
+
+          <!-- Course Meta Information -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-gray-50 rounded-lg p-4 mb-6">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <div class="text-xs text-gray-500">Duration</div>
+                <div class="font-semibold text-gray-900">{{ selectedCourse()?.estimatedDuration || 'N/A' }} hours</div>
+              </div>
+            </div>
+
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              <div>
+                <div class="text-xs text-gray-500">Instructor</div>
+                <div class="font-semibold text-gray-900">{{ selectedCourse()?.instructor?.name || 'N/A' }}</div>
+              </div>
+            </div>
+
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-blue-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+              </svg>
+              <div>
+                <div class="text-xs text-gray-500">Enrolled</div>
+                <div class="font-semibold text-gray-900">{{ formatDate(selectedCourse()!.createdAt) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Available Quizzes Section -->
+        <div class="mb-6">
+          <h4 class="text-xl font-bold text-gray-900 mb-4 flex items-center">
+            <svg class="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+            </svg>
+            Available Quizzes
+          </h4>
+
+          @if (isLoadingQuizzes(selectedCourse()!.id)) {
+            <div class="text-center py-8">
+              <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+              <p class="mt-2 text-gray-600">Loading quizzes...</p>
+            </div>
+          } @else if (getQuizzesForCourse(selectedCourse()!.id).length > 0) {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              @for (quiz of getQuizzesForCourse(selectedCourse()!.id); track quiz.id) {
+                <div class="border-2 border-gray-200 rounded-lg p-4 hover:border-blue-500 hover:shadow-md transition-all duration-200">
+                  <div class="flex items-start justify-between mb-3">
+                    <div class="flex-1">
+                      <h5 class="font-semibold text-gray-900 mb-1">{{ quiz.title }}</h5>
+                    </div>
+                  </div>
+
+                  <div class="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                    <div class="flex items-center">
+                      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      {{ quiz.timeLimitMinutes }} min
+                    </div>
+                  </div>
+
+                  <button 
+                    (click)="startQuiz(quiz.id)"
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Start Quiz
+                  </button>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="text-center py-8 bg-gray-50 rounded-lg">
+              <svg class="w-16 h-16 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+              </svg>
+              <p class="text-gray-600 font-medium">No quizzes available yet</p>
+              <p class="text-sm text-gray-500 mt-1">Check back later for assessments</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="sticky bottom-0 bg-gray-50 border-t border-gray-200 px-6 py-4 flex justify-end gap-3">
+        <button 
+          (click)="closeCourseDetails()"
+          class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

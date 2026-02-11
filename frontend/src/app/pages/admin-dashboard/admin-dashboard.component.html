@@ -1,0 +1,194 @@
+<div class="page-fade min-h-screen bg-sand text-ink">
+  <!-- Shared Navigation -->
+  <app-shared-navbar></app-shared-navbar>
+  
+  <div class="relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="absolute -left-20 top-16 h-64 w-64 rounded-full bg-clay/20 blur-[90px]"></div>
+      <div class="absolute right-10 top-32 h-80 w-80 rounded-full bg-lagoon/20 blur-[100px]"></div>
+    </div>
+
+    <main class="relative mx-auto w-full max-w-6xl px-6 pb-20 pt-8">
+      <div class="mb-8">
+        <h1 class="text-3xl font-semibold text-ink md:text-4xl">Welcome, Administrator</h1>
+        <p class="mt-3 text-ink/70">Manage your learning platform and oversee all activities.</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="mb-8 grid gap-6 md:grid-cols-4">
+        <div class="rounded-3xl border border-ink/10 bg-white p-6 shadow-[0_16px_40px_rgba(43,37,28,0.08)]">
+          <div class="flex items-center gap-3">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-lagoon/20 text-lagoon">
+              👥
+            </span>
+            <div>
+              <p class="text-2xl font-semibold text-ink">247</p>
+              <p class="text-sm text-ink/60">Total Users</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-ink/10 bg-white p-6 shadow-[0_16px_40px_rgba(43,37,28,0.08)]">
+          <div class="flex items-center gap-3">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-citrus/20 text-ink">
+              📚
+            </span>
+            <div>
+              <p class="text-2xl font-semibold text-ink">18</p>
+              <p class="text-sm text-ink/60">Active Courses</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-ink/10 bg-white p-6 shadow-[0_16px_40px_rgba(43,37,28,0.08)]">
+          <div class="flex items-center gap-3">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-clay/20 text-clay">
+              ✅
+            </span>
+            <div>
+              <p class="text-2xl font-semibold text-ink">89%</p>
+              <p class="text-sm text-ink/60">Completion Rate</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-ink/10 bg-white p-6 shadow-[0_16px_40px_rgba(43,37,28,0.08)]">
+          <div class="flex items-center gap-3">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-ink/20 text-ink">
+              ❓
+            </span>
+            <div>
+              <p class="text-2xl font-semibold text-ink">1,432</p>
+              <p class="text-sm text-ink/60">Quiz Submissions</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content Grid -->
+      <div class="grid gap-8 lg:grid-cols-[1fr_400px]">
+        <!-- Left Column -->
+        <div class="space-y-8">
+          <!-- Quick Actions -->
+          <div class="rounded-4xl border border-ink/10 bg-white p-8 shadow-[0_24px_60px_rgba(43,37,28,0.08)]">
+            <h2 class="text-xl font-semibold text-ink">Quick Actions</h2>
+            <div class="mt-6 grid gap-4 md:grid-cols-2">
+              <button class="flex items-center gap-3 rounded-2xl border border-ink/10 p-4 text-left transition hover:bg-sand/50">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-lagoon text-sand">+</span>
+                <div>
+                  <p class="font-semibold text-ink">Create Course</p>
+                  <p class="text-sm text-ink/60">Add new learning content</p>
+                </div>
+              </button>
+              <button class="flex items-center gap-3 rounded-2xl border border-ink/10 p-4 text-left transition hover:bg-sand/50">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-citrus text-ink">📊</span>
+                <div>
+                  <p class="font-semibold text-ink">View Analytics</p>
+                  <p class="text-sm text-ink/60">Platform insights</p>
+                </div>
+              </button>
+              <button class="flex items-center gap-3 rounded-2xl border border-ink/10 p-4 text-left transition hover:bg-sand/50">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-clay text-sand">👤</span>
+                <div>
+                  <p class="font-semibold text-ink">Manage Users</p>
+                  <p class="text-sm text-ink/60">User administration</p>
+                </div>
+              </button>
+              <button class="flex items-center gap-3 rounded-2xl border border-ink/10 p-4 text-left transition hover:bg-sand/50">
+                <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-ink text-sand">⚙️</span>
+                <div>
+                  <p class="font-semibold text-ink">Settings</p>
+                  <p class="text-sm text-ink/60">Platform configuration</p>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Recent Activity -->
+          <div class="rounded-4xl border border-ink/10 bg-white p-8 shadow-[0_24px_60px_rgba(43,37,28,0.08)]">
+            <h2 class="text-xl font-semibold text-ink">Recent Activity</h2>
+            <div class="mt-6 space-y-4">
+              <div class="flex items-center gap-4 rounded-2xl border border-ink/10 p-4">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-lagoon/20 text-lagoon text-sm">JD</span>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold text-ink">John Doe completed "React Fundamentals"</p>
+                  <p class="text-xs text-ink/60">2 minutes ago</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 rounded-2xl border border-ink/10 p-4">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-citrus/20 text-ink text-sm">SM</span>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold text-ink">Sarah Miller enrolled in "UX Design Basics"</p>
+                  <p class="text-xs text-ink/60">15 minutes ago</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-4 rounded-2xl border border-ink/10 p-4">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-clay/20 text-clay text-sm">AL</span>
+                <div class="flex-1">
+                  <p class="text-sm font-semibold text-ink">Alex Lee submitted quiz "JavaScript Basics"</p>
+                  <p class="text-xs text-ink/60">1 hour ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="space-y-8">
+          <!-- System Status -->
+          <div class="rounded-4xl border border-ink/10 bg-ink p-8 text-sand shadow-[0_24px_60px_rgba(43,37,28,0.2)]">
+            <h2 class="text-xl font-semibold">System Status</h2>
+            <div class="mt-6 space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-sand/70">Server Health</span>
+                <span class="flex items-center gap-2 text-sm font-semibold">
+                  <span class="h-2 w-2 rounded-full bg-citrus"></span>
+                  Excellent
+                </span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-sand/70">Database</span>
+                <span class="flex items-center gap-2 text-sm font-semibold">
+                  <span class="h-2 w-2 rounded-full bg-citrus"></span>
+                  Online
+                </span>
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-sm text-sand/70">API Response</span>
+                <span class="flex items-center gap-2 text-sm font-semibold">
+                  <span class="h-2 w-2 rounded-full bg-lagoon"></span>
+                  45ms
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Top Courses -->
+          <div class="rounded-4xl border border-ink/10 bg-white p-8 shadow-[0_24px_60px_rgba(43,37,28,0.08)]">
+            <h2 class="text-xl font-semibold text-ink">Top Performing Courses</h2>
+            <div class="mt-6 space-y-4">
+              <div class="rounded-2xl border border-ink/10 bg-sand/50 p-4">
+                <p class="font-semibold text-ink">Web Development Fundamentals</p>
+                <div class="mt-2 flex items-center justify-between text-sm">
+                  <span class="text-ink/60">156 enrollments</span>
+                  <span class="text-lagoon font-semibold">94% completion</span>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-ink/10 bg-sand/50 p-4">
+                <p class="font-semibold text-ink">Data Science Basics</p>
+                <div class="mt-2 flex items-center justify-between text-sm">
+                  <span class="text-ink/60">89 enrollments</span>
+                  <span class="text-clay font-semibold">87% completion</span>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-ink/10 bg-sand/50 p-4">
+                <p class="font-semibold text-ink">Mobile App Design</p>
+                <div class="mt-2 flex items-center justify-between text-sm">
+                  <span class="text-ink/60">72 enrollments</span>
+                  <span class="text-citrus font-semibold">92% completion</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

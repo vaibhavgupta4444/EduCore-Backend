@@ -1,0 +1,150 @@
+/* Custom Material Stepper Styles */
+
+::ng-deep .mat-stepper-vertical {
+  background: transparent !important;
+}
+
+::ng-deep .mat-step-header {
+  padding: 16px !important;
+  background: white;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+::ng-deep .mat-step-header:hover {
+  background: #f9fafb !important;
+}
+
+::ng-deep .mat-step-header[aria-selected="true"] {
+  background: #eff6ff !important;
+  border: 2px solid #2563eb;
+}
+
+::ng-deep .mat-step-label {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+}
+
+::ng-deep .mat-step-icon {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+::ng-deep .mat-step-icon-selected {
+  background-color: #1d4ed8 !important;
+}
+
+::ng-deep .mat-step-icon-state-done {
+  background-color: #16a34a !important;
+}
+
+::ng-deep .mat-vertical-content-container {
+  margin-left: 36px !important;
+  padding-left: 24px !important;
+  padding-right: 0 !important;
+}
+
+::ng-deep .mat-vertical-stepper-content {
+  padding-top: 8px !important;
+}
+
+/* Material Radio Button Styles */
+::ng-deep .mat-mdc-radio-button {
+  display: block !important;
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-radio-button .mdc-radio {
+  padding: 8px !important;
+}
+
+::ng-deep .mat-mdc-radio-button .mdc-form-field {
+  width: 100%;
+}
+
+::ng-deep .mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__background {
+  border-color: #2563eb !important;
+}
+
+::ng-deep .mat-mdc-radio-button.mat-mdc-radio-checked .mdc-radio__background .mdc-radio__inner-circle {
+  border-color: #2563eb !important;
+  background-color: #2563eb !important;
+}
+
+/* Material Button Styles */
+::ng-deep .mat-mdc-raised-button.mat-primary {
+  background-color: #2563eb !important;
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-raised-button.mat-primary:hover {
+  background-color: #1d4ed8 !important;
+}
+
+::ng-deep .mat-mdc-raised-button.mat-accent {
+  background-color: #16a34a !important;
+  color: white !important;
+}
+
+::ng-deep .mat-mdc-raised-button.mat-accent:hover {
+  background-color: #15803d !important;
+}
+
+::ng-deep .mat-mdc-button.mat-warn {
+  color: #dc2626 !important;
+}
+
+::ng-deep .mat-mdc-button mat-icon {
+  margin-right: 4px;
+}
+
+::ng-deep .mat-mdc-raised-button mat-icon {
+  margin-right: 4px;
+}
+
+/* Material Progress Bar */
+::ng-deep .mat-mdc-progress-bar {
+  height: 8px !important;
+  border-radius: 4px !important;
+}
+
+::ng-deep .mat-mdc-progress-bar .mdc-linear-progress__bar-inner {
+  border-color: #2563eb !important;
+}
+
+/* Material Icon */
+::ng-deep mat-icon {
+  vertical-align: middle;
+}
+
+/* Custom button classes */
+.mat-button-custom {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mat-submit-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 24px !important;
+  font-size: 16px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  ::ng-deep .mat-step-header {
+    padding: 12px !important;
+  }
+
+  ::ng-deep .mat-step-label {
+    font-size: 14px !important;
+  }
+
+  ::ng-deep .mat-vertical-content-container {
+    margin-left: 24px !important;
+    padding-left: 16px !important;
+  }
+}

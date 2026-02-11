@@ -1,0 +1,212 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Shared Navigation -->
+  <app-shared-navbar></app-shared-navbar>
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-6">
+      <h1 class="text-3xl font-bold text-gray-900">Create New Course</h1>
+      <p class="text-gray-600 mt-1">Fill in the details below to create your course</p>
+    </div>
+
+    @if (success()) {
+      <div class="bg-green-50 border border-green-200 rounded-lg p-6 text-center">
+        <svg class="w-16 h-16 text-green-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <h3 class="text-xl font-semibold text-green-900 mb-2">Course Created Successfully!</h3>
+        <p class="text-green-700">Redirecting to courses...</p>
+      </div>
+    } @else {
+      <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+        @if (error()) {
+          <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
+            <div class="flex items-center gap-2 text-red-600">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>{{ error() }}</span>
+            </div>
+          </div>
+        }
+
+        <!-- Basic Information Section -->
+        <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Basic Information</h2>
+          
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="title">
+                Course Title *
+              </label>
+              <input
+                id="title"
+                type="text"
+                formControlName="title"
+                placeholder="Enter course title"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500"
+                [class.border-red-500]="courseForm.get('title')?.invalid && courseForm.get('title')?.touched">
+              @if (courseForm.get('title')?.invalid && courseForm.get('title')?.touched) {
+                <p class="text-xs text-red-500 mt-1">
+                  @if (courseForm.get('title')?.errors?.['required']) {
+                    Title is required
+                  }
+                  @if (courseForm.get('title')?.errors?.['minlength']) {
+                    Title must be at least 3 characters long
+                  }
+                </p>
+              }
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1" for="description">
+                Course Description *
+              </label>
+              <textarea
+                id="description"
+                formControlName="description"
+                rows="4"
+                placeholder="Describe what students will learn in this course"
+                class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500"
+                [class.border-red-500]="courseForm.get('description')?.invalid && courseForm.get('description')?.touched">
+              </textarea>
+              @if (courseForm.get('description')?.invalid && courseForm.get('description')?.touched) {
+                <p class="text-xs text-red-500 mt-1">
+                  @if (courseForm.get('description')?.errors?.['required']) {
+                    Description is required
+                  }
+                  @if (courseForm.get('description')?.errors?.['minlength']) {
+                    Description must be at least 10 characters long
+                  }
+                </p>
+              }
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="category">
+                  Category *
+                </label>
+                <select
+                  id="category"
+                  formControlName="category"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500"
+                  [class.border-red-500]="courseForm.get('category')?.invalid && courseForm.get('category')?.touched">
+                  <option value="">Select a category</option>
+                  @for (category of categories; track category) {
+                    <option [value]="category">{{ category }}</option>
+                  }
+                </select>
+                @if (courseForm.get('category')?.invalid && courseForm.get('category')?.touched) {
+                  <p class="text-xs text-red-500 mt-1">Category is required</p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="difficulty">
+                  Difficulty Level *
+                </label>
+                <select
+                  id="difficulty"
+                  formControlName="difficulty"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                  <option [value]="Difficulty.Beginner">Beginner</option>
+                  <option [value]="Difficulty.Intermediate">Intermediate</option>
+                  <option [value]="Difficulty.Advanced">Advanced</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="estimatedDuration">
+                  Estimated Duration (hours) *
+                </label>
+                <input
+                  id="estimatedDuration"
+                  type="number"
+                  formControlName="estimatedDuration"
+                  min="1"
+                  max="500"
+                  placeholder="e.g., 10"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500"
+                  [class.border-red-500]="courseForm.get('estimatedDuration')?.invalid && courseForm.get('estimatedDuration')?.touched">
+                @if (courseForm.get('estimatedDuration')?.invalid && courseForm.get('estimatedDuration')?.touched) {
+                  <p class="text-xs text-red-500 mt-1">
+                    @if (courseForm.get('estimatedDuration')?.errors?.['required']) {
+                      Duration is required
+                    }
+                    @if (courseForm.get('estimatedDuration')?.errors?.['min']) {
+                      Duration must be at least 1 hour
+                    }
+                    @if (courseForm.get('estimatedDuration')?.errors?.['max']) {
+                      Duration cannot exceed 500 hours
+                    }
+                  </p>
+                }
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="courseStatus">
+                  Status
+                </label>
+                <select 
+                  id="courseStatus" 
+                  formControlName="courseStatus"
+                  class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+                  <option [value]="CourseStatus.Draft">Draft</option>
+                  <option [value]="CourseStatus.Published">Published</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Course Media Section -->
+        <div class="bg-white rounded-lg shadow-sm border p-6 mb-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Course Media</h2>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="thumbnailUrl">
+              Thumbnail URL
+            </label>
+            <input
+              id="thumbnailUrl"
+              type="url"
+              formControlName="thumbnailUrl"
+              placeholder="https://example.com/image.jpg"
+              class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500">
+            <p class="text-xs text-gray-500 mt-1">
+              Optional: Add a thumbnail image for your course (URL format)
+            </p>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-4 justify-end">
+          <button
+            type="button"
+            (click)="onCancel()"
+            [disabled]="loading()"
+            class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            [disabled]="!courseForm.valid || loading()"
+            class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+            @if (loading()) {
+              <span class="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"></span>
+              Creating...
+            } @else {
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+              </svg>
+              Create Course
+            }
+          </button>
+        </div>
+      </form>
+    }
+  </div>
+</div>

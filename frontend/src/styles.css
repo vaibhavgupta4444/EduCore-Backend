@@ -1,0 +1,52 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+@import "@angular/material/prebuilt-themes/azure-blue.css";
+@import "tailwindcss";
+
+:root {
+	--sand: #f5f1ea;
+	--ink: #2b251c;
+	--clay: #b8563a;
+	--lagoon: #2f7c7d;
+	--citrus: #f0c45e;
+}
+
+@theme {
+	--color-sand: var(--sand);
+	--color-ink: var(--ink);
+	--color-clay: var(--clay);
+	--color-lagoon: var(--lagoon);
+	--color-citrus: var(--citrus);
+}
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+	background: var(--sand);
+	color: var(--ink);
+}
+
+h1,
+h2,
+h3 {
+	font-family: "Fraunces", "Plus Jakarta Sans", serif;
+}
+
+.page-fade {
+	animation: page-fade 0.7s ease-out both;
+}
+
+@keyframes page-fade {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

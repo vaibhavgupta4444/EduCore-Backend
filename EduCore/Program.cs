@@ -51,6 +51,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // register services
 builder.Services.AddScoped<IAuthServices, AuthService>();
 builder.Services.AddScoped<ICourseServices, CourseService>();
+builder.Services.AddScoped<IQuestionServices, QuestionService>();
 
 // added controller + swagger
 

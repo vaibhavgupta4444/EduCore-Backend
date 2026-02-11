@@ -104,7 +104,7 @@ public class QuizService : IQuizServices
             if (studentAnswer == null || studentAnswer.SelectedOptionId == null)
                 continue;
 
-            // Works for both SingleChoice & MultipleChoice (single correct answer version)
+            
             var correctOptionId = question.Options
                 .Where(o => o.IsCorrect)
                 .Select(o => o.Id)

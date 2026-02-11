@@ -22,9 +22,7 @@ public class EnrollmentController : ControllerBase
         
         var userId = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
-        
-        Console.WriteLine($"User ID: {userId}");
-        Console.WriteLine($"User Role: {userRole}");
+ 
 
         if (userId == null)
             return Unauthorized("User ID not found in token");

@@ -3,6 +3,7 @@ using EduCore.Infrastructure.Data;
 using EduCore.Application.DTOs.Question;
 using EduCore.Domain.Entities;
 using EduCore.Domain.Enums;
+using Microsoft.EntityFrameworkCore;
 using OfficeOpenXml;
 
 namespace EduCore.Application.Services;
@@ -144,4 +145,80 @@ public class QuestionService : IQuestionServices
 
     return result;
 }
+
+    public async Task<IEnumerable<Question>> GetByQuizAsync(Guid quizId)
+    {
+        return await _context.Questions
+            .Include(q => q.Options)
+            .Where(q => q.QuizId == quizId)
+            .OrderBy(q => q.CreatedAt)
+            .ToListAsync();
+    }
+
+    public async Task<Question> UpdateQuestionAsync(Guid questionId, CreateQuestionDto dto)
+    {
+        ValidateQuestion(dto);
+
+        var question = await _context.Questions
+            .Include(q => q.Options)
+            .FirstOrDefaultAsync(q => q.Id == questionId);
+        
+        if (question == null)
+            throw new KeyNotFoundException("Question not found.");
+
+        question.Text = dto.Text;
+        question.Type = dto.Type;
+
+        // Remove old options
+        _context.QuestionOptions.RemoveRange(question.Options);
+
+        // Add new options
+        question.Options = dto.Options.Select(o => new QuestionOption
+        {
+            Id = Guid.NewGuid(),
+            Text = o.Text,
+            IsCorrect = o.IsCorrect,
+            QuestionId = questionId
+        }).ToList();
+
+        _context.Questions.Update(question);
+        await _context.SaveChangesAsync();
+
+        return question;
+    }
+
+    public async Task<bool> DeleteQuestionAsync(Guid questionId)
+    {
+        var question = await _context.Questions
+            .Include(q => q.Options)
+            .FirstOrDefaultAsync(q => q.Id == questionId);
+        
+        if (question == null)
+            throw new KeyNotFoundException("Question not found.");
+
+        // Remove options
+        _context.QuestionOptions.RemoveRange(question.Options);
+
+        // Remove question
+        _context.Questions.Remove(question);
+        
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
+    public async Task<Question> ToggleQuestionStatusAsync(Guid questionId)
+    {
+        var question = await _context.Questions.FindAsync(questionId);
+        
+        if (question == null)
+            throw new KeyNotFoundException("Question not found.");
+
+        question.IsActive = !question.IsActive;
+        
+        _context.Questions.Update(question);
+        await _context.SaveChangesAsync();
+
+        return question;
+    }
 }

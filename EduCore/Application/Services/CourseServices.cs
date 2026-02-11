@@ -98,4 +98,11 @@ public class CourseService : ICourseServices
 
         return "Course updated successfully";
     }
+
+    public async Task<Course?> GetCourseByIdAsync(Guid courseId)
+    {
+        return await _context.Courses
+            .Include(c => c.Instructor)
+            .FirstOrDefaultAsync(c => c.Id == courseId);
+    }
 }

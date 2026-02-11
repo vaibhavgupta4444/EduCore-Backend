@@ -53,6 +53,17 @@ public class CourseController : ControllerBase
         return Ok(courses);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetCourseById(Guid id)
+    {
+        var course = await _courseService.GetCourseByIdAsync(id);
+        
+        if (course == null)
+            return NotFound(new { message = "Course not found" });
+
+        return Ok(course);
+    }
+
     [Authorize(Roles = "Instructor")]
     [HttpPut("{id}/publish")]
     public async Task<IActionResult> PublishCourse(Guid id)

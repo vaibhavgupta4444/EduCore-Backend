@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using EduCore.Application.Interfaces;
+using System.Security.Claims;
 
 namespace EduCore.Controllers;
 [Route("api/[controller]")]
@@ -18,10 +19,15 @@ public class EnrollmentController : ControllerBase
     [Authorize(Roles = "User")]
     public async Task<IActionResult> Enroll(Guid courseId)
     {
-        var userId = User.FindFirst("id")?.Value;
+        
+        var userId = User.FindFirst("id")?.Value ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+        
+        Console.WriteLine($"User ID: {userId}");
+        Console.WriteLine($"User Role: {userRole}");
 
         if (userId == null)
-            return Unauthorized();
+            return Unauthorized("User ID not found in token");
 
         var result = await _enrollmentService
             .EnrollAsync(courseId, Guid.Parse(userId));

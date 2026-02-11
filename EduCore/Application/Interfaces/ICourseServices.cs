@@ -10,4 +10,5 @@ public interface ICourseServices
     Task<string> PublishCourseAsync(Guid courseId, Guid instructorId);
     Task<List<Course>> GetPublishedCoursesAsync(string? category, string? search);
     Task<List<Course>> GetInstructorCoursesAsync(Guid instructorId);
+    Task<Course?> GetCourseByIdAsync(Guid courseId);
 }

@@ -25,12 +25,41 @@ public class QuizController : ControllerBase
         return Ok(id);
     }
 
-    [Authorize(Roles = "Instructor")]
     [HttpGet("course/{courseId}")]
     public async Task<IActionResult> GetByCourse(Guid courseId)
     {
         var quizzes = await _service.GetByCourseAsync(courseId);
         return Ok(quizzes);
+    }
+
+    [Authorize(Roles = "Instructor")]
+    [HttpPut("{quizId}")]
+    public async Task<IActionResult> Update(Guid quizId, CreateQuizDto dto)
+    {
+        try
+        {
+            var quiz = await _service.UpdateQuizAsync(quizId, dto);
+            return Ok(quiz);
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
+    }
+
+    [Authorize(Roles = "Instructor")]
+    [HttpDelete("{quizId}")]
+    public async Task<IActionResult> Delete(Guid quizId)
+    {
+        try
+        {
+            await _service.DeleteQuizAsync(quizId);
+            return Ok(new { message = "Quiz deleted successfully" });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            return NotFound(new { message = ex.Message });
+        }
     }
     
     [Authorize(Roles = "User")]

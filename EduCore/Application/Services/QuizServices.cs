@@ -138,5 +138,48 @@ public class QuizService : IQuizServices
         };
     }
 
+    public async Task<Quiz> UpdateQuizAsync(Guid quizId, CreateQuizDto dto)
+    {
+        var quiz = await _context.Quizzes.FindAsync(quizId);
+        
+        if (quiz == null)
+            throw new KeyNotFoundException("Quiz not found.");
+
+        quiz.Title = dto.Title;
+        quiz.TimeLimitMinutes = dto.TimeLimitMinutes;
+
+        _context.Quizzes.Update(quiz);
+        await _context.SaveChangesAsync();
+
+        return quiz;
+    }
+
+    public async Task<bool> DeleteQuizAsync(Guid quizId)
+    {
+        var quiz = await _context.Quizzes
+            .Include(q => q.Questions)
+            .ThenInclude(q => q.Options)
+            .FirstOrDefaultAsync(q => q.Id == quizId);
+        
+        if (quiz == null)
+            throw new KeyNotFoundException("Quiz not found.");
+
+        // Remove all question options
+        foreach (var question in quiz.Questions)
+        {
+            _context.QuestionOptions.RemoveRange(question.Options);
+        }
+
+        // Remove all questions
+        _context.Questions.RemoveRange(quiz.Questions);
+
+        // Remove the quiz
+        _context.Quizzes.Remove(quiz);
+        
+        await _context.SaveChangesAsync();
+
+        return true;
+    }
+
 
 }
